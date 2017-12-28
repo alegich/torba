@@ -47,7 +47,7 @@
   <ItemGroup>
     <Compile Include="TorbaInterceptorClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TransportClient.cs" />
+    <Compile Include="TorbaClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
