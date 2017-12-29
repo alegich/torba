@@ -1,20 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Castle.DynamicProxy;
+﻿using Castle.DynamicProxy;
 
 namespace torba
 {
    public class TorbaInterceptorClient: IInterceptor
    {
+      private readonly ITorbaTransport transport;
+
+      public TorbaInterceptorClient(ITorbaTransport transport)
+      {
+         this.transport = transport;
+      }
+
       public void Intercept(IInvocation invocation)
       {
          string className = invocation.InvocationTarget.GetType().Name;
-         List<object> args = invocation.Arguments.ToList();
-         string retType = invocation.Method.ReturnType.ToString();
-         Console.Out.WriteLine($"class: {className}, argumens: {string.Join(",", args)}, return type: {retType}");
-         // with return type methods, NPE is thrown without Proceed
-         invocation.Proceed();
+         //List<object> args = invocation.Arguments.ToList();
+         //string retTypeName = invocation.Method.ReturnType.ToString();
+         //Console.Out.WriteLine($"class: {className}, method: {invocation.Method.Name}, argumens: {string.Join(",", args)}, return type: {retTypeName}");
+
+         ITorbaRequest request = new TorbaRequest(invocation.InvocationTarget, className, invocation.Method.Name, invocation.Arguments);
+         ITorbaResponse response = transport.SendRequest(request);
+
+         invocation.ReturnValue = response.GetReturnedResult();
+
+         //Console.Out.WriteLine($"Result of invocation: {invocation.ReturnValue}");
       }
    }
 }

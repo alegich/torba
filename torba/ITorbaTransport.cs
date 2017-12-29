@@ -2,6 +2,6 @@
 {
    public interface ITorbaTransport
    {
-
+      ITorbaResponse SendRequest(ITorbaRequest request);
    }
 }

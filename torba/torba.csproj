@@ -45,10 +45,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ITorbaRequest.cs" />
+    <Compile Include="ITorbaResponse.cs" />
     <Compile Include="ITorbaTransport.cs" />
     <Compile Include="TorbaInterceptorClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TorbaClient.cs" />
+    <Compile Include="TorbaInvocationTransport.cs" />
+    <Compile Include="TorbaRequest.cs" />
+    <Compile Include="TorbaResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
