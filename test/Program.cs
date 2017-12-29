@@ -9,7 +9,13 @@ namespace test
 {
    public class Program
    {
-      public class TestClass
+      public interface ITestClass
+      {
+         void VoidMethod(int a);
+         int IntMethod();
+      }
+
+      public class TestClass: ITestClass
       {
          virtual public void VoidMethod(int a)
          {
@@ -24,7 +30,7 @@ namespace test
       }
       static void Main(string[] args)
       {
-         TestClass test = new TorbaClient<TestClass>(new TestClass()).Proxy;
+         ITestClass test = new TorbaClient<ITestClass>(/*new TestClass()*/).Proxy;
          test.VoidMethod(5);
          Console.Out.WriteLine($"IntMethod returned: {test.IntMethod()}");
          Console.ReadKey();

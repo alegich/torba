@@ -13,7 +13,8 @@ namespace torba
 
       public void Intercept(IInvocation invocation)
       {
-         string className = invocation.InvocationTarget.GetType().Name;
+         string className = invocation.Proxy.GetType().GetInterfaces()[0].Name;
+            //invocation.InvocationTarget.GetType().Name;
          //List<object> args = invocation.Arguments.ToList();
          //string retTypeName = invocation.Method.ReturnType.ToString();
          //Console.Out.WriteLine($"class: {className}, method: {invocation.Method.Name}, argumens: {string.Join(",", args)}, return type: {retTypeName}");
