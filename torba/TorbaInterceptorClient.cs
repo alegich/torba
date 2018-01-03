@@ -1,4 +1,6 @@
-﻿using Castle.DynamicProxy;
+﻿using System;
+using System.Reflection;
+using Castle.DynamicProxy;
 
 namespace torba
 {
@@ -22,7 +24,11 @@ namespace torba
          ITorbaRequest request = new TorbaRequest(invocation.InvocationTarget, className, invocation.Method.Name, invocation.Arguments);
          ITorbaResponse response = transport.SendRequest(request);
 
-         invocation.ReturnValue = response.GetReturnedResult();
+         if (invocation.Method.ReturnType != typeof (void))
+         {
+            invocation.ReturnValue = response.GetReturnedResult() ??
+                                     Activator.CreateInstance(invocation.Method.ReturnType);
+         }
 
          //Console.Out.WriteLine($"Result of invocation: {invocation.ReturnValue}");
       }

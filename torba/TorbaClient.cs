@@ -21,7 +21,7 @@ namespace torba
       {
          Proxy =
             (T)
-               generator.CreateInterfaceProxyWithTargetInterface<T>(null,
+               generator.CreateInterfaceProxyWithoutTarget<T>(
                   new TorbaInterceptorClient(new TorbaInvocationTransport()));
       }
    }

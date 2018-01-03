@@ -1,4 +1,6 @@
-﻿namespace torba
+﻿using System;
+
+namespace torba
 {
    public interface ITorbaRequest
    {
