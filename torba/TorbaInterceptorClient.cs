@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Castle.DynamicProxy;
 
 namespace torba
 {
-   public class TorbaInterceptorClient: IInterceptor
+   class TorbaInterceptorClient: IInterceptor
    {
       private readonly ITorbaTransport transport;
 
@@ -15,22 +17,37 @@ namespace torba
 
       public void Intercept(IInvocation invocation)
       {
-         string className = invocation.Proxy.GetType().GetInterfaces()[0].Name;
-            //invocation.InvocationTarget.GetType().Name;
-         //List<object> args = invocation.Arguments.ToList();
-         //string retTypeName = invocation.Method.ReturnType.ToString();
-         //Console.Out.WriteLine($"class: {className}, method: {invocation.Method.Name}, argumens: {string.Join(",", args)}, return type: {retTypeName}");
-
-         ITorbaRequest request = new TorbaRequest(invocation.InvocationTarget, className, invocation.Method.Name, invocation.Arguments);
+         ITorbaRequest request = new TorbaRequest(invocation.InvocationTarget, invocation.Method.Name, invocation.Arguments);
          ITorbaResponse response = transport.SendRequest(request);
 
          if (invocation.Method.ReturnType != typeof (void))
          {
             invocation.ReturnValue = response.GetReturnedResult() ??
-                                     Activator.CreateInstance(invocation.Method.ReturnType);
+                                     CreateDefaultInstance(invocation.Method.ReturnType);
+         }
+      }
+
+      private object CreateDefaultInstance(Type type)
+      {
+         object retVal = null;
+
+         if (type.IsPrimitive)
+         {
+            retVal = Activator.CreateInstance(type);
+         }
+         else
+         {
+            var constructor = type.GetConstructors().OrderBy(c => c.GetParameters().Length).FirstOrDefault();
+
+            if (constructor == null)
+            {
+               throw new MissingMethodException($"No public constructor defined for object of type {type.FullName}");
+            }
+
+            retVal = constructor.Invoke(new object[constructor.GetParameters().Length]);
          }
 
-         //Console.Out.WriteLine($"Result of invocation: {invocation.ReturnValue}");
+         return retVal;
       }
    }
 }
