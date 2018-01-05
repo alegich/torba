@@ -125,5 +125,37 @@ namespace torbatest
          Assert.IsInstanceOfType(result, typeof(CustomObject));
          Assert.AreEqual(0, result.Start);
       }
+
+      public class CustomObjWithoutPublicCtor
+      {
+         private CustomObjWithoutPublicCtor()
+         {
+         }
+      }
+
+      public interface ICustomPrivateObjMethodWithArgs
+      {
+         CustomObjWithoutPublicCtor CallMe(int i, string str, object obj, bool b);
+      }
+
+      [TestMethod]
+      public void TestTorbaClientWithoutTargetObject_CustomPrivateObjMethodWithArgs()
+      {
+         TorbaClient<ICustomPrivateObjMethodWithArgs> client = new TorbaClient<ICustomPrivateObjMethodWithArgs>();
+
+         try
+         {
+            CustomObjWithoutPublicCtor result = client.Proxy.CallMe(3, "some str", 5, true);
+
+            Assert.Fail("Expected exception is not thrown");
+         }
+         catch (MissingMethodException)
+         {
+         }
+         catch (Exception e)
+         {
+            Assert.Fail("Incorrect exception is thrown: {0}", e);
+         }
+      }
    }
 }
