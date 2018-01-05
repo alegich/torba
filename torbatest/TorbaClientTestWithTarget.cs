@@ -116,11 +116,11 @@ namespace torbatest
       [TestMethod]
       public void TestTorbaClientWithTargetObject_VoidMethod()
       {
-         TorbaClient<IVoidMethod> client = new TorbaClient<IVoidMethod>(new Impl());
+         TorbaClient<IVoidMethod> client = new TorbaClient<IVoidMethod>();
 
          try
          {
-            client.Proxy.CallMe();
+            client.CreateProxy(new Impl()).CallMe();
          }
          catch (Exception e)
          {
@@ -131,11 +131,11 @@ namespace torbatest
       [TestMethod]
       public void TestTorbaClientWithTargetObject_VoidMethodWithArgs()
       {
-         TorbaClient<IVoidMethodWithArgs> client = new TorbaClient<IVoidMethodWithArgs>(new Impl());
+         TorbaClient<IVoidMethodWithArgs> client = new TorbaClient<IVoidMethodWithArgs>();
 
          try
          {
-            client.Proxy.CallMeVoid(3, "some str", 5, true);
+            client.CreateProxy(new Impl()).CallMeVoid(3, "some str", 5, true);
          }
          catch (Exception e)
          {
@@ -146,9 +146,9 @@ namespace torbatest
       [TestMethod]
       public void TestTorbaClientWithTargetObject_StringMethodWithArgs()
       {
-         TorbaClient<IStringMethodWithArgs> client = new TorbaClient<IStringMethodWithArgs>(new Impl());
+         TorbaClient<IStringMethodWithArgs> client = new TorbaClient<IStringMethodWithArgs>();
 
-         string result = client.Proxy.CallMeString(3, "some str", new object(), true);
+         string result = client.CreateProxy(new Impl()).CallMeString(3, "some str", new object(), true);
 
          Assert.AreEqual("CallMeString", result);
       }
@@ -156,9 +156,9 @@ namespace torbatest
       [TestMethod]
       public void TestTorbaClientWithTargetObject_IntMethodWithArgs()
       {
-         TorbaClient<IIntMethodWithArgs> client = new TorbaClient<IIntMethodWithArgs>(new Impl());
+         TorbaClient<IIntMethodWithArgs> client = new TorbaClient<IIntMethodWithArgs>();
 
-         int result = client.Proxy.CallMeInt(3, "some str", 5, true);
+         int result = client.CreateProxy(new Impl()).CallMeInt(3, "some str", 5, true);
 
          Assert.AreEqual(25, result);
       }
@@ -166,9 +166,9 @@ namespace torbatest
       [TestMethod]
       public void TestTorbaClientWithTargetObject_ObjMethodWithArgs()
       {
-         TorbaClient<IObjMethodWithArgs> client = new TorbaClient<IObjMethodWithArgs>(new Impl());
+         TorbaClient<IObjMethodWithArgs> client = new TorbaClient<IObjMethodWithArgs>();
 
-         object result = client.Proxy.CallMeObj(3, "some str", 5, true);
+         object result = client.CreateProxy(new Impl()).CallMeObj(3, "some str", 5, true);
 
          Assert.IsNotNull(result);
          Assert.IsInstanceOfType(result, typeof(string));
@@ -178,9 +178,9 @@ namespace torbatest
       [TestMethod]
       public void TestTorbaClientWithTargetObject_CustomObjMethodWithArgs()
       {
-         TorbaClient<ICustomObjMethodWithArgs> client = new TorbaClient<ICustomObjMethodWithArgs>(new Impl());
+         TorbaClient<ICustomObjMethodWithArgs> client = new TorbaClient<ICustomObjMethodWithArgs>();
 
-         CustomObject result = client.Proxy.CallMeCustomObj(3, "some str", 5, true);
+         CustomObject result = client.CreateProxy(new Impl()).CallMeCustomObj(3, "some str", 5, true);
 
          Assert.IsNotNull(result);
          Assert.IsInstanceOfType(result, typeof(CustomObject));
@@ -190,16 +190,16 @@ namespace torbatest
       [TestMethod]
       public void TestTorbaClientWithTargetObject_OverloadedMethod()
       {
-         TorbaClient<IOverloadedMethod> client = new TorbaClient<IOverloadedMethod>(new Impl());
+         TorbaClient<IOverloadedMethod> client = new TorbaClient<IOverloadedMethod>();
 
          {
-            string result = client.Proxy.CallOverload();
+            string result = client.CreateProxy(new Impl()).CallOverload();
 
             Assert.IsNotNull(result);
             Assert.AreEqual("CallOverload", result);
          }
          {
-            string result = client.Proxy.CallOverload(5);
+            string result = client.CreateProxy(new Impl()).CallOverload(5);
 
             Assert.IsNotNull(result);
             Assert.AreEqual("CallOverload 5", result);
@@ -209,16 +209,16 @@ namespace torbatest
       [TestMethod]
       public void TestTorbaClientWithTargetObject_OverloadedExcplicitMethod()
       {
-         TorbaClient<IOverloadedMethodExplicit> client = new TorbaClient<IOverloadedMethodExplicit>(new Impl());
+         TorbaClient<IOverloadedMethodExplicit> client = new TorbaClient<IOverloadedMethodExplicit>();
 
          {
-            string result = client.Proxy.CallOverloadExplicit();
+            string result = client.CreateProxy(new Impl()).CallOverloadExplicit();
 
             Assert.IsNotNull(result);
             Assert.AreEqual("CallOverloadExplicit", result);
          }
          {
-            string result = client.Proxy.CallOverloadExplicit(7);
+            string result = client.CreateProxy(new Impl()).CallOverloadExplicit(7);
 
             Assert.IsNotNull(result);
             Assert.AreEqual("CallOverloadExplicit 7", result);

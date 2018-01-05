@@ -19,7 +19,7 @@ namespace torbatest
 
          try
          {
-            client.Proxy.CallMe();
+            client.CreateProxy().CallMe();
          }
          catch (Exception e)
          {
@@ -39,7 +39,7 @@ namespace torbatest
 
          try
          {
-            client.Proxy.CallMe(3, "some str", 5, true);
+            client.CreateProxy().CallMe(3, "some str", 5, true);
          }
          catch (Exception e)
          {
@@ -57,7 +57,7 @@ namespace torbatest
       {
          TorbaClient<IStringMethodWithArgs> client = new TorbaClient<IStringMethodWithArgs>();
 
-         string result = client.Proxy.CallMe(3, "some str", 5, true);
+         string result = client.CreateProxy().CallMe(3, "some str", 5, true);
 
          Assert.AreEqual(string.Empty, result);
       }
@@ -72,7 +72,7 @@ namespace torbatest
       {
          TorbaClient<IIntMethodWithArgs> client = new TorbaClient<IIntMethodWithArgs>();
 
-         int result = client.Proxy.CallMe(3, "some str", 5, true);
+         int result = client.CreateProxy().CallMe(3, "some str", 5, true);
 
          Assert.AreEqual(0, result);
       }
@@ -87,7 +87,7 @@ namespace torbatest
       {
          TorbaClient<IObjMethodWithArgs> client = new TorbaClient<IObjMethodWithArgs>();
 
-         object result = client.Proxy.CallMe(3, "some str", 5, true);
+         object result = client.CreateProxy().CallMe(3, "some str", 5, true);
 
          Assert.IsNotNull(result);
          Assert.IsInstanceOfType(result, typeof(object));
@@ -119,7 +119,7 @@ namespace torbatest
       {
          TorbaClient<ICustomObjMethodWithArgs> client = new TorbaClient<ICustomObjMethodWithArgs>();
 
-         CustomObject result = client.Proxy.CallMe(3, "some str", 5, true);
+         CustomObject result = client.CreateProxy().CallMe(3, "some str", 5, true);
 
          Assert.IsNotNull(result);
          Assert.IsInstanceOfType(result, typeof(CustomObject));
@@ -145,7 +145,7 @@ namespace torbatest
 
          try
          {
-            CustomObjWithoutPublicCtor result = client.Proxy.CallMe(3, "some str", 5, true);
+            client.CreateProxy().CallMe(3, "some str", 5, true);
 
             Assert.Fail("Expected exception is not thrown");
          }

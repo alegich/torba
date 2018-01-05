@@ -9,20 +9,16 @@ namespace torba
 
    public class TorbaClient<T>: TorbaClient where T: class
    {
-      public T Proxy { get; private set; }
-
-      public TorbaClient(T proxied)
+      public T CreateProxy(T proxied)
       {
-         Proxy = generator.CreateInterfaceProxyWithTarget(proxied,
+         return generator.CreateInterfaceProxyWithTarget(proxied,
             new TorbaInterceptorClient(new TorbaInvocationTransport()));
       }
 
-      public TorbaClient()
+      public T CreateProxy()
       {
-         Proxy =
-            (T)
-               generator.CreateInterfaceProxyWithoutTarget<T>(
-                  new TorbaInterceptorClient(new TorbaInvocationTransport()));
+         return generator.CreateInterfaceProxyWithoutTarget<T>(
+               new TorbaInterceptorClient(new TorbaInvocationTransport()));
       }
    }
 }

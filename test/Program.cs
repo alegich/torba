@@ -65,7 +65,7 @@ namespace test
       }
       static void Main(string[] args)
       {
-         ITestClass test = new TorbaClient<ITestClass>(new TestClass()).Proxy;
+         ITestClass test = new TorbaClient<ITestClass>().CreateProxy(new TestClass());
          test.VoidMethod(5);
          Console.Out.WriteLine($"StringMethod returned: {test.StringMethod()}");
          Console.Out.WriteLine($"IntMethod returned: {test.IntMethod()}");
