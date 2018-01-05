@@ -28,8 +28,9 @@ namespace test
       {
          void VoidMethod(int a);
          int IntMethod();
-
+         string MyStringMethod();
          string StringMethod();
+
 
          A Correct(A inParam, int i, bool b);
       }
@@ -47,7 +48,11 @@ namespace test
             return 22;
          }
 
-         public string StringMethod()
+         string ITestClass.MyStringMethod()
+         {
+            return "goodbye";
+         }
+         string ITestClass.StringMethod()
          {
             return "hello";
          }
@@ -60,7 +65,7 @@ namespace test
       }
       static void Main(string[] args)
       {
-         ITestClass test = new TorbaClient<ITestClass>(/*new TestClass()*/).Proxy;
+         ITestClass test = new TorbaClient<ITestClass>(new TestClass()).Proxy;
          test.VoidMethod(5);
          Console.Out.WriteLine($"StringMethod returned: {test.StringMethod()}");
          Console.Out.WriteLine($"IntMethod returned: {test.IntMethod()}");
