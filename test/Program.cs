@@ -63,6 +63,7 @@ namespace test
             return new A(i);
          }
       }
+
       static void Main(string[] args)
       {
          ITestClass test = new TorbaClient<ITestClass>().CreateProxy(new TestClass());
