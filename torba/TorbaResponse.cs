@@ -1,6 +1,6 @@
 ﻿namespace torba
 {
-   class TorbaResponse: ITorbaResponse
+   public class TorbaResponse: ITorbaResponse
    {
       private readonly object response;
 
