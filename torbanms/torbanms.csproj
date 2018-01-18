@@ -40,6 +40,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,15 +49,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IRequestSerializer.cs" />
+    <Compile Include="RequestJsonSerializer.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="RequestSharpSerializer.cs" />
     <Compile Include="TorbaNmsTransport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\torbautils\torbautils.csproj">
+      <Project>{C5DFCBFD-573E-4296-9D61-95FA7C5138A1}</Project>
+      <Name>torbautils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\torba\torba.csproj">
       <Project>{B718FCC9-460B-4797-978E-214C6E8D5B55}</Project>
       <Name>torba</Name>

@@ -5,7 +5,7 @@ using Castle.Core.Internal;
 
 namespace torba
 {
-   class TorbaInvocationTransport: ITorbaTransport
+   public class TorbaInvocationTransport: ITorbaTransport
    {
       public ITorbaResponse SendRequest(ITorbaRequest request)
       {
@@ -14,6 +14,10 @@ namespace torba
          MethodInfo method = GetTargetMethod(target?.GetType(), request.GetMethodName(), argTypes);
          object result = method?.Invoke(target, request.GetArguments());
          return new TorbaResponse(result);
+      }
+
+      public void ProcessRequests()
+      {
       }
 
       private MethodInfo GetTargetMethod(Type type, string methodName, Type[] argTypes)

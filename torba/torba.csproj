@@ -54,9 +54,16 @@
     <Compile Include="TorbaInvocationTransport.cs" />
     <Compile Include="TorbaRequest.cs" />
     <Compile Include="TorbaResponse.cs" />
+    <Compile Include="TorbaServer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\torbautils\torbautils.csproj">
+      <Project>{C5DFCBFD-573E-4296-9D61-95FA7C5138A1}</Project>
+      <Name>torbautils</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

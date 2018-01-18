@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using Apache.NMS;
 using Polenter.Serialization;
 using torba;
@@ -11,8 +13,14 @@ namespace torbanms
    {
       private readonly IConnection connection;
 
+      private ISession session;
+
+      private readonly IRequestSerializer serializer;
+
       public TorbaNmsTransport()
       {
+         serializer = new RequestSharpSerializer();
+         //serializer = new RequestJsonSerializer();
          try
          {
             IConnectionFactory factory = new NMSConnectionFactory("activemq:failover:(tcp://localhost:5672)");
@@ -38,12 +46,12 @@ namespace torbanms
             IMessageProducer producer = session.CreateProducer(queue);
             IMessageConsumer consumer = session.CreateConsumer(responseQueue);
 
-            IMessage message = CreateMessage(request, producer);
+            IMessage message = serializer.CreateMessage(request, producer);
 
             message.NMSReplyTo = responseQueue;
             message.NMSCorrelationID = responseQueue.QueueName;
             producer.Send(message);
-            IMessage response = consumer.Receive(TimeSpan.FromSeconds(1));
+            IMessage response = consumer.Receive(TimeSpan.FromSeconds(100));
             if (response is IObjectMessage)
             {
                responseRaw = (response as IObjectMessage).Body;
@@ -53,28 +61,44 @@ namespace torbanms
          return new TorbaResponse(responseRaw);
       }
 
-      protected virtual IMessage CreateMessage(ITorbaRequest request, IMessageProducer producer)
+      public void ProcessRequests()
       {
-         IMapMessage message = producer.CreateMapMessage();
-         message.Body.SetString("targetObjectName", request.GetObject().GetType().Name);
-         message.Body.SetString("targetMethodName", request.GetMethodName());
+         session = connection.CreateSession(AcknowledgementMode.AutoAcknowledge);
 
-         if (request.GetArguments().Length > 0)
+         IDestination queue = Apache.NMS.Util.SessionUtil.GetQueue(session, "queue://timecalc.write");
+
+         IMessageConsumer consumer = session.CreateConsumer(queue);
+
+         while (true)
          {
-            SharpSerializer serializer = new SharpSerializer(true);
-
-            for (int i = 0; i < request.GetArguments().Length; ++i)
-            {
-               using (MemoryStream argStream = new MemoryStream())
-               {
-                  serializer.Serialize(request.GetArguments()[i], argStream);
-                  byte[] serializedArg = argStream.ToArray();
-                  message.Body.SetBytes($"targetArgument{i}", serializedArg);
-               }
-            }
+            Consumer_Listener(consumer.Receive());
          }
+      }
 
-         return message;
+      protected ITorbaResponse InvokeRequest(ITorbaRequest request)
+      {
+         ITorbaTransport invocationTransport = new TorbaInvocationTransport();
+         return invocationTransport.SendRequest(request);
+      }
+
+      private void Consumer_Listener(IMessage message)
+      {
+         ITorbaRequest request = serializer.CreateRequest(message);
+
+         if (request != null)
+         {
+            ITorbaResponse response = InvokeRequest(request);
+            Task.Factory.StartNew(
+               () => SendResponse(response, message.NMSReplyTo, message.NMSCorrelationID));
+         }
+      }
+
+      protected void SendResponse(ITorbaResponse response, IDestination replyTo, string correlationId)
+      {
+         IMessageProducer producer = session.CreateProducer(replyTo);
+         IMessage responseMessage = producer.CreateObjectMessage(response.GetReturnedResult());
+         responseMessage.NMSCorrelationID = correlationId;
+         producer.Send(responseMessage);
       }
 
       private void CleanUp()

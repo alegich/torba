@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Castle.DynamicProxy;
+using torbautils;
 
 namespace torba
 {
@@ -23,31 +24,8 @@ namespace torba
          if (invocation.Method.ReturnType != typeof (void))
          {
             invocation.ReturnValue = response.GetReturnedResult() ??
-                                     CreateDefaultInstance(invocation.Method.ReturnType);
+                                     TorbaUtils.CreateDefaultInstance(invocation.Method.ReturnType);
          }
-      }
-
-      private object CreateDefaultInstance(Type type)
-      {
-         object retVal = null;
-
-         if (type.IsPrimitive)
-         {
-            retVal = Activator.CreateInstance(type);
-         }
-         else
-         {
-            var constructor = type.GetConstructors().OrderBy(c => c.GetParameters().Length).FirstOrDefault();
-
-            if (constructor == null)
-            {
-               throw new MissingMethodException($"No public constructor defined for object of type {type.FullName}");
-            }
-
-            retVal = constructor.Invoke(new object[constructor.GetParameters().Length]);
-         }
-
-         return retVal;
       }
    }
 }

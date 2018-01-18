@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "torbatest", "torbatest\torb
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "torbanms", "torbanms\torbanms.csproj", "{D925CAD1-DD96-482B-9629-072EC21A759C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "torbautils", "torbautils\torbautils.csproj", "{C5DFCBFD-573E-4296-9D61-95FA7C5138A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "testdll", "testdll\testdll.csproj", "{375167B9-CF01-49CD-B811-5420338372A3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{D925CAD1-DD96-482B-9629-072EC21A759C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D925CAD1-DD96-482B-9629-072EC21A759C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D925CAD1-DD96-482B-9629-072EC21A759C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5DFCBFD-573E-4296-9D61-95FA7C5138A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5DFCBFD-573E-4296-9D61-95FA7C5138A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5DFCBFD-573E-4296-9D61-95FA7C5138A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5DFCBFD-573E-4296-9D61-95FA7C5138A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{375167B9-CF01-49CD-B811-5420338372A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{375167B9-CF01-49CD-B811-5420338372A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{375167B9-CF01-49CD-B811-5420338372A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{375167B9-CF01-49CD-B811-5420338372A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

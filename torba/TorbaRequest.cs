@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace torba
 {
-   class TorbaRequest: ITorbaRequest
+   public class TorbaRequest: ITorbaRequest
    {
       private readonly string targetMethodName;
       private readonly List<object> arguments;
