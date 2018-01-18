@@ -51,6 +51,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\torbanms\torbanms.csproj">
+      <Project>{D925CAD1-DD96-482B-9629-072EC21A759C}</Project>
+      <Name>torbanms</Name>
+    </ProjectReference>
     <ProjectReference Include="..\torba\torba.csproj">
       <Project>{B718FCC9-460B-4797-978E-214C6E8D5B55}</Project>
       <Name>torba</Name>

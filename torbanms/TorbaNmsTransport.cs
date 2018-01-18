@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections;
+using System.IO;
 using Apache.NMS;
+using Polenter.Serialization;
 using torba;
 
 namespace torbanms
@@ -25,7 +28,7 @@ namespace torbanms
 
       public ITorbaResponse SendRequest(ITorbaRequest request)
       {
-         ITorbaResponse retVal = null;
+         object responseRaw = null;
 
          using (ISession session = connection.CreateSession(AcknowledgementMode.AutoAcknowledge))
          {
@@ -35,23 +38,43 @@ namespace torbanms
             IMessageProducer producer = session.CreateProducer(queue);
             IMessageConsumer consumer = session.CreateConsumer(responseQueue);
 
-            IMapMessage message = producer.CreateMapMessage();
-            message.Body.SetString("targetObjectName", request.GetObject().GetType().Name);
-            message.Body.SetString("targetMethodName", request.GetMethodName());
-            message.Body.SetList("targetMethodArguments", request.GetArguments());
+            IMessage message = CreateMessage(request, producer);
 
             message.NMSReplyTo = responseQueue;
             message.NMSCorrelationID = responseQueue.QueueName;
             producer.Send(message);
-            IMessage response = consumer.Receive(TimeSpan.FromSeconds(10));
+            IMessage response = consumer.Receive(TimeSpan.FromSeconds(1));
             if (response is IObjectMessage)
             {
-               object responseRaw = (response as IObjectMessage).Body;
-               retVal = new TorbaResponse(responseRaw);
+               responseRaw = (response as IObjectMessage).Body;
             }
          }
 
-         return retVal;
+         return new TorbaResponse(responseRaw);
+      }
+
+      protected virtual IMessage CreateMessage(ITorbaRequest request, IMessageProducer producer)
+      {
+         IMapMessage message = producer.CreateMapMessage();
+         message.Body.SetString("targetObjectName", request.GetObject().GetType().Name);
+         message.Body.SetString("targetMethodName", request.GetMethodName());
+
+         if (request.GetArguments().Length > 0)
+         {
+            SharpSerializer serializer = new SharpSerializer(true);
+
+            for (int i = 0; i < request.GetArguments().Length; ++i)
+            {
+               using (MemoryStream argStream = new MemoryStream())
+               {
+                  serializer.Serialize(request.GetArguments()[i], argStream);
+                  byte[] serializedArg = argStream.ToArray();
+                  message.Body.SetBytes($"targetArgument{i}", serializedArg);
+               }
+            }
+         }
+
+         return message;
       }
 
       private void CleanUp()

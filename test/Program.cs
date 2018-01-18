@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using torba;
+using torbanms;
 
 namespace test
 {
@@ -12,6 +13,8 @@ namespace test
       public class A
       {
          public int Start { get; }
+
+         public A() { Start = 0; }
 
          public A(int start)
          {
@@ -66,7 +69,7 @@ namespace test
 
       static void Main(string[] args)
       {
-         ITestClass test = new TorbaClient<ITestClass>().CreateProxy(new TestClass());
+         ITestClass test = new TorbaClient<ITestClass>(new TorbaNmsTransport()).CreateProxy(new TestClass());
          test.VoidMethod(5);
          Console.Out.WriteLine($"StringMethod returned: {test.StringMethod()}");
          Console.Out.WriteLine($"IntMethod returned: {test.IntMethod()}");
